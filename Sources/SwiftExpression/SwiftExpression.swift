@@ -7,7 +7,7 @@ public class Expression: Equatable {
   private let variables: [String:Any]
   
   //MARK: - Init
-  init(_ string: String, variables: [String:Any]=[:]) {
+  public init(_ string: String, variables: [String:Any]=[:]) {
     self.string = string
     self.variables = variables
   }
