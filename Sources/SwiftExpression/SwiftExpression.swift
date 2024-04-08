@@ -5,6 +5,7 @@ public class Expression: Equatable {
   //MARK: - Variables
   public let string: String
   private let variables: [String:Any]
+  public var error: Error?
   
   //MARK: - Init
   public init(_ string: String, variables: [String:Any]=[:]) {
@@ -24,7 +25,7 @@ public class Expression: Equatable {
         value = expr.expressionValue(with: variables, context: nil) as? Double
       }
     } catch {
-      print(error.localizedDescription)
+      self.error = error
     }
     return value
   }
