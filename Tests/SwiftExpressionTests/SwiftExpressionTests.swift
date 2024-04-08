@@ -2,11 +2,14 @@ import XCTest
 @testable import SwiftExpression
 
 final class SwiftExpressionTests: XCTestCase {
-    func testExample() throws {
-        // XCTest Documentation
-        // https://developer.apple.com/documentation/xctest
-
-        // Defining Test Cases and Test Methods
-        // https://developer.apple.com/documentation/xctest/defining_test_cases_and_test_methods
-    }
+  
+  func testEvaluateSimpleExpression() {
+    let expression = Expression("10 + 2")
+    XCTAssertEqual(expression.result(), 12)
+  }
+  
+  func testEvaluateFailure() {
+    let expression = Expression("22/")
+    XCTAssertEqual(expression.result(), nil)
+  }
 }

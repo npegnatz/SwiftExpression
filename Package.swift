@@ -4,20 +4,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwiftExpression",
-    products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
-        .library(
-            name: "SwiftExpression",
-            targets: ["SwiftExpression"]),
-    ],
-    targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "SwiftExpression"),
-        .testTarget(
-            name: "SwiftExpressionTests",
-            dependencies: ["SwiftExpression"]),
-    ]
+  name: "SwiftExpression",
+  products: [
+    // Products define the executables and libraries a package produces, making them visible to other packages.
+    .library(
+      name: "SwiftExpression",
+      targets: ["SwiftExpression", "SwiftExpressionObjC"]),
+  ],
+  targets: [
+    // Targets are the basic building blocks of a package, defining a module or a test suite.
+    // Targets can depend on other targets in this package and products from dependencies.
+    .target(name: "SwiftExpressionObjC", publicHeadersPath: "include"),
+    .target(name: "SwiftExpression", dependencies: ["SwiftExpressionObjC"]),
+    .testTarget(name: "SwiftExpressionTests", dependencies: ["SwiftExpression"]),
+  ]
 )
