@@ -23,6 +23,11 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(expression.result(), 7)
   }
   
+  func testTrigExpression() {
+    let expression = Expression("cos(0)")
+    XCTAssertEqual(expression.result(), 1)
+  }
+  
   func testEqualExpressions() {
     XCTAssertEqual(Expression("45+32"), Expression("70+7"))
   }

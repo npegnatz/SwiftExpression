@@ -20,7 +20,7 @@ public class Expression: Equatable {
         let withVariablesReplaced = variables.reduce(string) { partialResult, variable in
           partialResult.replacingOccurrences(of: variable.key, with: "\(variable.value)")
         }
-        let expr = NSExpression(format: withVariablesReplaced)
+        let expr = NSExpression.customBuilder(withVariablesReplaced)
         value = expr.expressionValue(with: variables, context: nil) as? Double
       }
     } catch {
