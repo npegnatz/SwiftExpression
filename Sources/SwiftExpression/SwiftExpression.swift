@@ -13,7 +13,7 @@ public class Expression: Equatable {
   }
   
   //MARK: - Functions
-  func result() -> Double? {
+  public func result() -> Double? {
     var value: Double?
     do {
       try SafeExpressionWrapper.perform {
