@@ -3,7 +3,7 @@ import SwiftExpressionObjC
 
 public class Expression: Equatable {
   //MARK: - Variables
-  private let string: String
+  public let string: String
   private let variables: [String:Any]
   
   //MARK: - Init
