@@ -1,10 +1,3 @@
-//
-//  SafeExpressionWrapper.m
-//  
-//
-//  Created by Other on 4/7/24.
-//
-
 #include "SafeExpressionWrapper.h"
 #import <Foundation/Foundation.h>
 

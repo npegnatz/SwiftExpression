@@ -17,7 +17,10 @@ public class Expression: Equatable {
     var value: Double?
     do {
       try SafeExpressionWrapper.perform {
-        let expr = NSExpression(format: self.string)
+        let withVariablesReplaced = variables.reduce(string) { partialResult, variable in
+          partialResult.replacingOccurrences(of: variable.key, with: "\(variable.value)")
+        }
+        let expr = NSExpression(format: withVariablesReplaced)
         value = expr.expressionValue(with: variables, context: nil) as? Double
       }
     } catch {
