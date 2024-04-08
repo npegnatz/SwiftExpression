@@ -1,23 +1,32 @@
 import Foundation
 import SwiftExpressionObjC
 
-class Expression {
+public class Expression: Equatable {
+  //MARK: - Variables
   private let string: String
+  private let variables: [String:Any]
   
-  init(_ string: String) {
+  //MARK: - Init
+  init(_ string: String, variables: [String:Any]=[:]) {
     self.string = string
+    self.variables = variables
   }
   
+  //MARK: - Functions
   func result() -> Double? {
-    var result: Double?
+    var value: Double?
     do {
       try SafeExpressionWrapper.perform {
         let expr = NSExpression(format: self.string)
-        result = expr.expressionValue(with: nil, context: nil) as? Double
+        value = expr.expressionValue(with: variables, context: nil) as? Double
       }
     } catch {
-      result = nil
+      print(error.localizedDescription)
     }
-    return result
+    return value
+  }
+  
+  public static func == (lhs: Expression, rhs: Expression) -> Bool {
+    return lhs.result() == rhs.result()
   }
 }
