@@ -21,7 +21,7 @@ extension String {
   func addingMultiplicationSigns() -> String {
     let regexPattern = """
             (\\d)(?=[a-zA-Zπ(])|\
-            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max|ln|arcsin|arccos|arctan))\
+            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max|ln|arcsin|arccos|arctan|cbrt|sinh))\
             (?=\\d|\\()|\
             (\\))(?=\\d|[a-zA-Zπ(])|\
             (\\))(?=\\()
@@ -51,7 +51,7 @@ extension String {
   //* Recursively solves and replaces common trig functions with their values (NSExpression does not support trig functions)
   func replacingFunctions(_ variables: [String:Any] = [:]) -> String {
     var customExpression = self
-    let functions = ["arccos", "arcsin", "arctan", "cos", "sin", "tan"]
+    let functions = ["arccos", "arcsin", "arctan", "sinh", "cos", "sin", "tan", "cbrt"]
     
     for function in functions {
       let pattern = "\(function)\\(([^)]+)\\)"
@@ -87,6 +87,10 @@ extension String {
             result = acos(argument)
           case "arctan":
             result = atan(argument)
+          case "cbrt":
+            result = pow(argument, 1.0/3.0)
+          case "sinh":
+            result = sinh(argument)
           default:
             continue
           }

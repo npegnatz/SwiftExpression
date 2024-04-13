@@ -67,6 +67,35 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(Expression("y / 3 + 5", variables: ["y": 9]).result(), 8)
     XCTAssertEqual(Expression("2x^2 - 3x + 1", variables: ["x": -1]).result(), 6)
     XCTAssertEqual(Expression("z^2 - 4z + 4", variables: ["z": 2]).result(), 0)
-    XCTAssertEqual(Expression("2*sin(π/3)", variables: ["π": Double.pi]).result()!, 1.73205080757, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("2*sin(π/3)").result()!, 1.73205080757, accuracy: targetAccuracy)
+    
+    // Advanced mathematical functions
+    XCTAssertEqual(Expression("cos(2 * π)").result(), 1)
+    XCTAssertEqual(Expression("tan(π / 4)").result()!, 1, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("sin(π / 6)").result()!, 0.5, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("sqrt(81)").result(), 9)
+    XCTAssertEqual(Expression("cbrt(27)").result(), 3)
+
+    XCTAssertEqual(Expression("exp(2)").result()!, 7.38905609893, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("3^3").result(), 27)
+    XCTAssertEqual(Expression("log(\(M_E)^2)").result()!, 0.8685889638, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("log(1000)").result(), 3)
+    
+    XCTAssertEqual(Expression("3x^3 - 2x^2 + x - 1", variables: ["x": 3]).result(), 65)
+    XCTAssertEqual(Expression("a^2 + b^2", variables: ["a": 4, "b": 3]).result(), 25)
+    XCTAssertEqual(Expression("\(M_E)^(ln(5))").result()!, 5, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("sin(2π / 3) + cos(π / 3)").result()!, 0.86602540378 + 0.5, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("tan(3π / 4) - 1").result()!, -2, accuracy: targetAccuracy)
+    
+    XCTAssertEqual(Expression("1/3 + 1/6").result(), 0.5)
+    XCTAssertEqual(Expression("sqrt(2) * sqrt(2)").result()!, 2, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("1 / (1 / (1 / x))", variables: ["x": 5]).result(), 0.2)
+    XCTAssertEqual(Expression("cbrt(64)").result()!, 4, accuracy: targetAccuracy)
+    
+    XCTAssertEqual(Expression("arcsin(1)").result(), Double.pi / 2)
+    XCTAssertEqual(Expression("arccos(1)").result(), 0)
+    XCTAssertEqual(Expression("arctan(1)").result(), Double.pi / 4)
+    XCTAssertEqual(Expression("2 * arctan(1)").result(), Double.pi / 2)
+    XCTAssertEqual(Expression("sinh(0)").result(), 0)
   }
 }
