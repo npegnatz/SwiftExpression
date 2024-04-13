@@ -5,19 +5,17 @@ import SwiftExpressionObjC
 public class Expression: Identifiable, Equatable {
   public let id = UUID()
   public let expressionString: String
-  public let variables: [String:Any]
   
-  public init(_ expressionString: String, variables: [String:Any]=[:]) {
-    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants().replacingVariables(variables).replacingFunctions(variables)
-    self.variables = variables
+  public init(_ expressionString: String) {
+    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants()
   }
   
   //MARK: - Functions
-  public func result() -> Double? {
+  public func result(variables: [String:Any]=[:]) -> Double? {
     var value: Double?
     do {
       try SafeExpressionWrapper.perform {
-        let expr = NSExpression(format: expressionString)
+        let expr = NSExpression(format: expressionString.replacingFunctions(variables).replacingVariables(variables))
         value = expr.expressionValue(with: nil, context: nil) as? Double
       }
     } catch {
@@ -27,16 +25,7 @@ public class Expression: Identifiable, Equatable {
   }
   
   public func isValid() -> Bool {
-    var valid = false
-    do {
-      try SafeExpressionWrapper.perform {
-        let _ = NSExpression(format: expressionString)
-        valid = true
-      }
-    } catch {
-      valid = false
-    }
-    return valid
+    return result(variables: ["x":1,"y":1]) != nil
   }
   
   public static func == (lhs: Expression, rhs: Expression) -> Bool {

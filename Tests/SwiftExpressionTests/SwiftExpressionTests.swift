@@ -12,13 +12,13 @@ final class SwiftExpressionTests: XCTestCase {
   }
   
   func testComplexExpression() {
-    XCTAssertEqual(Expression("7x(2+3)", variables: ["x":3]).result(), 105)
-    XCTAssertEqual(Expression("2*x+1", variables: ["x":5]).result(), 11)
+    XCTAssertEqual(Expression("7x(2+3)").result(variables: ["x":3]), 105)
+    XCTAssertEqual(Expression("2*x+1").result(variables: ["x":5]), 11)
   }
   
   func testMathFunctionExpression() {
     XCTAssertEqual(Expression("abs(-10)").result(), 10)
-    XCTAssertEqual(Expression("abs(x)", variables: ["x":-7]).result(), 7)
+    XCTAssertEqual(Expression("abs(x)").result(variables: ["x":-7]), 7)
     XCTAssertEqual(Expression("sqrt(4)").result(), 2)
     XCTAssertEqual(Expression("exp(1)").result()!, 2.7182818284, accuracy: targetAccuracy)
   }
@@ -32,6 +32,8 @@ final class SwiftExpressionTests: XCTestCase {
   
   func testValidity() {
     XCTAssertTrue(Expression("abs(x)").isValid())
+    XCTAssertTrue(Expression("sin(x)").isValid())
+    XCTAssertTrue(Expression("tan(π)").isValid())
     XCTAssertTrue(Expression("(32.452*43.234)/(sqrt(10))").isValid())
     
     XCTAssertFalse(Expression("The quick brown fox jumped over the lazy dog").isValid())
@@ -63,10 +65,10 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(Expression("log(100)").result(), 2)
     
     // Variables and more complex expressions
-    XCTAssertEqual(Expression("3x^2 + 5x + 2", variables: ["x": 2]).result(), 24)
-    XCTAssertEqual(Expression("y / 3 + 5", variables: ["y": 9]).result(), 8)
-    XCTAssertEqual(Expression("2x^2 - 3x + 1", variables: ["x": -1]).result(), 6)
-    XCTAssertEqual(Expression("z^2 - 4z + 4", variables: ["z": 2]).result(), 0)
+    XCTAssertEqual(Expression("3x^2 + 5x + 2").result(variables: ["x": 2]), 24)
+    XCTAssertEqual(Expression("y / 3 + 5").result(variables: ["y": 9]), 8)
+    XCTAssertEqual(Expression("2x^2 - 3x + 1").result(variables: ["x": -1]), 6)
+    XCTAssertEqual(Expression("z^2 - 4z + 4").result(variables: ["z": 2]), 0)
     XCTAssertEqual(Expression("2*sin(π/3)").result()!, 1.73205080757, accuracy: targetAccuracy)
     
     // Advanced mathematical functions
@@ -81,15 +83,15 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(Expression("log(\(M_E)^2)").result()!, 0.8685889638, accuracy: targetAccuracy)
     XCTAssertEqual(Expression("log(1000)").result(), 3)
     
-    XCTAssertEqual(Expression("3x^3 - 2x^2 + x - 1", variables: ["x": 3]).result(), 65)
-    XCTAssertEqual(Expression("a^2 + b^2", variables: ["a": 4, "b": 3]).result(), 25)
+    XCTAssertEqual(Expression("3x^3 - 2x^2 + x - 1").result(variables: ["x": 3]), 65)
+    XCTAssertEqual(Expression("a^2 + b^2").result(variables: ["a": 4, "b": 3]), 25)
     XCTAssertEqual(Expression("\(M_E)^(ln(5))").result()!, 5, accuracy: targetAccuracy)
     XCTAssertEqual(Expression("sin(2π / 3) + cos(π / 3)").result()!, 0.86602540378 + 0.5, accuracy: targetAccuracy)
     XCTAssertEqual(Expression("tan(3π / 4) - 1").result()!, -2, accuracy: targetAccuracy)
     
     XCTAssertEqual(Expression("1/3 + 1/6").result(), 0.5)
     XCTAssertEqual(Expression("sqrt(2) * sqrt(2)").result()!, 2, accuracy: targetAccuracy)
-    XCTAssertEqual(Expression("1 / (1 / (1 / x))", variables: ["x": 5]).result(), 0.2)
+    XCTAssertEqual(Expression("1 / (1 / (1 / x))").result(variables: ["x": 5]), 0.2)
     XCTAssertEqual(Expression("cbrt(64)").result()!, 4, accuracy: targetAccuracy)
     
     XCTAssertEqual(Expression("arcsin(1)").result(), Double.pi / 2)

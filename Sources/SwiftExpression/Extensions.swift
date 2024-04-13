@@ -71,7 +71,7 @@ extension String {
            let range = Range(argumentRange, in: customExpression) {
           let argumentSubstring = String(customExpression[range])
           
-          guard let argument = Expression(argumentSubstring, variables: variables).result() else { continue }
+          guard let argument = Expression(argumentSubstring).result(variables: variables) else { continue }
           
           let result: Double
           switch function {
