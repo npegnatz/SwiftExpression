@@ -13,14 +13,15 @@ extension String {
   
   //* Replaces mathematical constant values in the string
   func replacingConstants() -> String {
-    return self.replacingOccurrences(of: String.pi, with: Double.pi.description)
+    let constants = ["^":"**", "π":"\(Double.pi)"]
+    return replacingVariables(constants)
   }
   
   //* Adds "*" multiplication signs to handle common string inputs (5x, 2(3), 5π)
   func addingMultiplicationSigns() -> String {
     let regexPattern = """
             (\\d)(?=[a-zA-Zπ(])|\
-            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max))\
+            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max|ln))\
             (?=\\d|\\()|\
             (\\))(?=\\d|[a-zA-Zπ(])|\
             (\\))(?=\\()

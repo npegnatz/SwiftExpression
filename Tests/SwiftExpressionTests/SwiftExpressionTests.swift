@@ -41,4 +41,31 @@ final class SwiftExpressionTests: XCTestCase {
   func testEqualExpressions() {
     XCTAssertEqual(Expression("45+32"), Expression("70+7"))
   }
+  
+  func testOtherExpressions() {
+    // Basic arithmetic
+    XCTAssertEqual(Expression("1 + 1").result(), 2)
+    XCTAssertEqual(Expression("12 - 7").result(), 5)
+    XCTAssertEqual(Expression("4 * 5").result(), 20)
+    XCTAssertEqual(Expression("20 / 4").result(), 5)
+    XCTAssertEqual(Expression("5 ^ 2").result(), 25)
+    
+    // Combined operations
+    XCTAssertEqual(Expression("1 + 2 * 3").result(), 7)
+    XCTAssertEqual(Expression("(1 + 2) * 3").result(), 9)
+    XCTAssertEqual(Expression("18 / (2 + 4)").result(), 3)
+    XCTAssertEqual(Expression("4 * 5 / 2").result(), 10)
+    XCTAssertEqual(Expression("3 + 12 / (3 + 1)").result(), 6)
+    
+    // Functions and constants
+    XCTAssertEqual(Expression("ln(\(M_E))").result(), 1)
+    XCTAssertEqual(Expression("log(100)").result(), 2)
+    
+    // Variables and more complex expressions
+    XCTAssertEqual(Expression("3x^2 + 5x + 2", variables: ["x": 2]).result(), 24)
+    XCTAssertEqual(Expression("y / 3 + 5", variables: ["y": 9]).result(), 8)
+    XCTAssertEqual(Expression("2x^2 - 3x + 1", variables: ["x": -1]).result(), 6)
+    XCTAssertEqual(Expression("z^2 - 4z + 4", variables: ["z": 2]).result(), 0)
+    XCTAssertEqual(Expression("2*sin(π/3)", variables: ["π": Double.pi]).result()!, 1.73205080757, accuracy: targetAccuracy)
+  }
 }
