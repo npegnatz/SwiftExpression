@@ -35,6 +35,6 @@ final class ExtensionsTests: XCTestCase {
   }
   
   func testReplacingFunctions() {
-    XCTAssertEqual("tan(0)".replacingTrigFunctions(), "0.0")
+    XCTAssertEqual("tan(0)".replacingFunctions(), "0.0")
   }
 }

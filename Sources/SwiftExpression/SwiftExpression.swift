@@ -8,7 +8,7 @@ public class Expression: Identifiable, Equatable {
   public let variables: [String:Any]
   
   public init(_ expressionString: String, variables: [String:Any]=[:]) {
-    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants().replacingVariables(variables).replacingTrigFunctions(variables)
+    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants().replacingVariables(variables).replacingFunctions(variables)
     self.variables = variables
   }
   

@@ -27,6 +27,7 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(Expression("cos(0)").result(), 1)
     XCTAssertEqual(Expression("sin(π/2)").result(), 1)
     XCTAssertEqual(Expression("2*sin(cos(π))").result()!, -1.68294196962, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("arctan(1)").result() ?? 0, 0.785398163, accuracy: targetAccuracy, Expression("arctan(1)").expressionString)
   }
   
   func testValidity() {

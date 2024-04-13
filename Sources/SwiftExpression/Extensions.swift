@@ -21,7 +21,7 @@ extension String {
   func addingMultiplicationSigns() -> String {
     let regexPattern = """
             (\\d)(?=[a-zA-Zπ(])|\
-            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max|ln))\
+            ([a-zA-Zπ])(?<!\\b(abs|cos|sin|tan|sqrt|log|exp|min|max|ln|arcsin|arccos|arctan))\
             (?=\\d|\\()|\
             (\\))(?=\\d|[a-zA-Zπ(])|\
             (\\))(?=\\()
@@ -49,40 +49,51 @@ extension String {
   }
   
   //* Recursively solves and replaces common trig functions with their values (NSExpression does not support trig functions)
-  func replacingTrigFunctions(_ variables: [String:Any]=[:]) -> String {
+  func replacingFunctions(_ variables: [String:Any] = [:]) -> String {
     var customExpression = self
-    let trigFunctions = ["cos", "sin", "tan"]
+    let functions = ["arccos", "arcsin", "arctan", "cos", "sin", "tan"]
     
-    for trigFunction in trigFunctions {
-      if customExpression.contains(trigFunction) {
-        let range = NSRange(location: 0, length: customExpression.utf16.count)
-        let regex = try! NSRegularExpression(pattern: "\(trigFunction)\\(([^)]+)\\)")
-        let matches = regex.matches(in: customExpression, options: [], range: range)
-        
-        for match in matches.reversed() {
-          let argumentRange = match.range(at: 1)
-          let start = customExpression.index(customExpression.startIndex, offsetBy: argumentRange.location)
-          let end = customExpression.index(start, offsetBy: argumentRange.length)
-          let argumentSubstring = customExpression[start..<end]
+    for function in functions {
+      let pattern = "\(function)\\(([^)]+)\\)"
+      let regex = try! NSRegularExpression(pattern: pattern)
+      let range = NSRange(location: 0, length: customExpression.utf16.count)
+      
+      var matches = [NSTextCheckingResult]()
+      regex.enumerateMatches(in: customExpression, options: [], range: range) { match, _, _ in
+        if let match = match {
+          matches.append(match)
+        }
+      }
+      
+      for match in matches.reversed() {
+        let argumentRange = match.range(at: 1)
+        if argumentRange.location != NSNotFound,
+           let range = Range(argumentRange, in: customExpression) {
+          let argumentSubstring = String(customExpression[range])
           
-          guard let argument = Expression(String(argumentSubstring), variables: variables).result() else { continue }
+          guard let argument = Expression(argumentSubstring, variables: variables).result() else { continue }
           
           let result: Double
-          switch trigFunction {
+          switch function {
           case "cos":
             result = cos(argument)
           case "sin":
             result = sin(argument)
           case "tan":
             result = tan(argument)
+          case "arcsin":
+            result = asin(argument)
+          case "arccos":
+            result = acos(argument)
+          case "arctan":
+            result = atan(argument)
           default:
             continue
           }
           
-          let fullMatchRange = match.range(at: 0)
-          let fullMatchStart = customExpression.index(customExpression.startIndex, offsetBy: fullMatchRange.location)
-          let fullMatchEnd = customExpression.index(fullMatchStart, offsetBy: fullMatchRange.length)
-          customExpression.replaceSubrange(fullMatchStart..<fullMatchEnd, with: "\(result)")
+          if let fullMatchRange = Range(match.range(at: 0), in: customExpression) {
+            customExpression.replaceSubrange(fullMatchRange, with: "\(result)")
+          }
         }
       }
     }
