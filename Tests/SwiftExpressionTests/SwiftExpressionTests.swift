@@ -97,5 +97,16 @@ final class SwiftExpressionTests: XCTestCase {
     XCTAssertEqual(Expression("arctan(1)").result(), Double.pi / 4)
     XCTAssertEqual(Expression("2 * arctan(1)").result(), Double.pi / 2)
     XCTAssertEqual(Expression("sinh(0)").result(), 0)
+    
+    // Long and complex expressions involving multiple operations and functions
+    XCTAssertEqual(Expression("cos(π/4) + sin(π/4) - tan(π/4) * sqrt(16) + abs(-5)").result()!, 2.41421356237, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("((12 + 18) * (34 / 2) + (89 * 3) - 123) / 5 + 456").result(), 586.8)
+    XCTAssertEqual(Expression("((98765 + 4321 - 56789 / 3 + 210987 * 2) / 678 - 34567) * 890 + 12345 / 678").result(), -30100222.416420843)
+    
+    XCTAssertEqual(Expression("((12.5 + 18.75) * (34.2 / 2) - (56.3 / 7) + (89.1 * 3.2) - 123.45) / 5.5 + 456.78").result()!, 581.871298701, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("((987.6 - 654.3) / 3.2 + (210.2 * 2.1) - 345.7 + (678.8 / 9.4) * 8.2) * 12.3 / 7.4 - 89.5").result()!, 1226.9672229, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("(((123.12 + 345.34 - 567.56) * 234.23) / 567.67 + 789.78) * (12.21 - 456.45) + (789.89 / 123.32) - 90.01").result()!, -332770.36794005684, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("(12345.67 / 67.89 + 89.98 * 10.01 - 2345.65 + 67890.12 / (123.45 - 90.56) + 4567.89 - 890.12) * 12.34 / 345.67").result()!, 159.888617234, accuracy: targetAccuracy)
+    XCTAssertEqual(Expression("((98765.43 + 4321.12 - 56789.32 / 3.45 + 210987.65 * 2.12) / 678.78 - 34567.89) * 890.01 + 12345.67 / 678.89").result()!, -30065679.072848197, accuracy: targetAccuracy)
   }
 }
