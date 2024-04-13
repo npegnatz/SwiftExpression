@@ -8,7 +8,7 @@ public class Expression: Identifiable, Equatable {
   public let variables: [String:Any]
   
   public init(_ expressionString: String, variables: [String:Any]=[:]) {
-    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants().replacingVariables(variables)
+    self.expressionString = expressionString.addingMultiplicationSigns().replacingIntegersWithDecimals().replacingConstants().replacingVariables(variables).replacingTrigFunctions(variables)
     self.variables = variables
   }
   
@@ -17,8 +17,8 @@ public class Expression: Identifiable, Equatable {
     var value: Double?
     do {
       try SafeExpressionWrapper.perform {
-        let expr = NSExpression(format: replacingTrigFunctions(expressionString))
-        value = expr.expressionValue(with: variables, context: nil) as? Double
+        let expr = NSExpression(format: expressionString)
+        value = expr.expressionValue(with: nil, context: nil) as? Double
       }
     } catch {
       // Error
@@ -37,46 +37,6 @@ public class Expression: Identifiable, Equatable {
       valid = false
     }
     return valid
-  }
-  
-  func replacingTrigFunctions(_ str: String) -> String {
-    var customExpression = str
-    let trigFunctions = ["cos", "sin", "tan"]
-    
-    for trigFunction in trigFunctions {
-      if customExpression.contains(trigFunction) {
-        let range = NSRange(location: 0, length: customExpression.utf16.count)
-        let regex = try! NSRegularExpression(pattern: "\(trigFunction)\\(([^)]+)\\)")
-        let matches = regex.matches(in: customExpression, options: [], range: range)
-        
-        for match in matches.reversed() {
-          let argumentRange = match.range(at: 1)
-          let start = customExpression.index(customExpression.startIndex, offsetBy: argumentRange.location)
-          let end = customExpression.index(start, offsetBy: argumentRange.length)
-          let argumentSubstring = customExpression[start..<end]
-          
-          guard let argument = Expression(String(argumentSubstring), variables: variables).result() else { continue }
-          
-          let result: Double
-          switch trigFunction {
-          case "cos":
-            result = cos(argument)
-          case "sin":
-            result = sin(argument)
-          case "tan":
-            result = tan(argument)
-          default:
-            continue
-          }
-          
-          let fullMatchRange = match.range(at: 0)
-          let fullMatchStart = customExpression.index(customExpression.startIndex, offsetBy: fullMatchRange.location)
-          let fullMatchEnd = customExpression.index(fullMatchStart, offsetBy: fullMatchRange.length)
-          customExpression.replaceSubrange(fullMatchStart..<fullMatchEnd, with: "\(result)")
-        }
-      }
-    }
-    return customExpression
   }
   
   public static func == (lhs: Expression, rhs: Expression) -> Bool {

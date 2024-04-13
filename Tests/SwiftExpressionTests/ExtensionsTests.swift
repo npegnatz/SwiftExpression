@@ -33,4 +33,8 @@ final class ExtensionsTests: XCTestCase {
     XCTAssertEqual("123".replacingIntegersWithDecimals(), "123.0")
     XCTAssertEqual("9 + 12".replacingIntegersWithDecimals(), "9.0 + 12.0")
   }
+  
+  func testReplacingTrigFunctions() {
+    XCTAssertEqual("tan(0)".replacingTrigFunctions(), "0.0")
+  }
 }
